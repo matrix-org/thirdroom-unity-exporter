@@ -8,22 +8,25 @@ using UnityEditor;
 using UnityEngine;
 using UnityGLTF;
 
-public class MXPortalExtensionConfig : ScriptableObject
+namespace ThirdRoom
 {
-
-  [InitializeOnLoadMethod]
-  static void InitExt()
+  public class MXPortalExtensionConfig : ScriptableObject
   {
-    GLTFSceneExporter.AfterNodeExport += OnAfterNodeExport;
-  }
 
-  private static void OnAfterNodeExport(GLTFSceneExporter exporter, GLTFRoot gltfRoot, Transform transform, Node node)
-  {
-    var portal = transform.gameObject.GetComponent<MXPortalBehaviour>();
+    [InitializeOnLoadMethod]
+    static void InitExt()
+    {
+      GLTFSceneExporter.AfterNodeExport += OnAfterNodeExport;
+    }
 
-    if (portal != null) {
-      node.AddExtension(MX_Portal.ExtensionName, new MX_Portal() { uri = portal.uri });
-      exporter.DeclareExtensionUsage(MX_Portal.ExtensionName, false);
+    private static void OnAfterNodeExport(GLTFSceneExporter exporter, GLTFRoot gltfRoot, Transform transform, Node node)
+    {
+      var portal = transform.gameObject.GetComponent<MXPortalBehaviour>();
+
+      if (portal != null) {
+        node.AddExtension(MX_Portal.ExtensionName, new MX_Portal() { uri = portal.uri });
+        exporter.DeclareExtensionUsage(MX_Portal.ExtensionName, false);
+      }
     }
   }
 }

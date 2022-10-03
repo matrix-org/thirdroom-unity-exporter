@@ -20,5 +20,6 @@
       "description": "Examples of various Third Room features.",
       "path": "Samples~"
     }
-  ]
+  ],
+  "type": "library"
 }

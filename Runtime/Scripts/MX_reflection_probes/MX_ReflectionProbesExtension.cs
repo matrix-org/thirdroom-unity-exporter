@@ -10,77 +10,80 @@ using UnityGLTF;
 using Vector3 = GLTF.Math.Vector3;
 using UnityGLTF.Extensions;
 
-public class ReflectionProbesExtensionConfig : ScriptableObject
+namespace ThirdRoom
 {
-
-  [InitializeOnLoadMethod]
-  static void InitExt()
+  public class ReflectionProbesExtensionConfig : ScriptableObject
   {
-    GLTFSceneExporter.AfterNodeExport += OnAfterNodeExport;
-    GLTFSceneExporter.AfterSceneExport += OnAfterSceneExport;
-  }
 
-  private static List<MX_ReflectionProbe> reflectionProbes = new List<MX_ReflectionProbe>();
-
-  private static void OnAfterNodeExport(GLTFSceneExporter exporter, GLTFRoot gltfRoot, Transform transform, Node node)
-  {
-    ReflectionProbe unityReflectionProbe = transform.GetComponent<ReflectionProbe>();
-
-    if (unityReflectionProbe == null || !unityReflectionProbe.enabled) {
-      return;
+    [InitializeOnLoadMethod]
+    static void InitExt()
+    {
+      GLTFSceneExporter.AfterNodeExport += OnAfterNodeExport;
+      GLTFSceneExporter.AfterSceneExport += OnAfterSceneExport;
     }
 
-    var reflectionProbe = new MX_ReflectionProbe() {
-      size = unityReflectionProbe.size.ToGltfVector3Raw(),
-      reflectionProbeTexture = exporter.ExportTextureInfo(
-        unityReflectionProbe.customBakedTexture == null ?
-          unityReflectionProbe.bakedTexture : unityReflectionProbe.customBakedTexture,
-        GLTFSceneExporter.TextureMapType.CubeMap
-      )
-    };
+    private static List<MX_ReflectionProbe> reflectionProbes = new List<MX_ReflectionProbe>();
 
-    var nodeReflectionProbe = new MX_ReflectionProbeRef() {
-      reflectionProbe = new ReflectionProbeId() {
-        Id = reflectionProbes.Count,
-        Root = gltfRoot
+    private static void OnAfterNodeExport(GLTFSceneExporter exporter, GLTFRoot gltfRoot, Transform transform, Node node)
+    {
+      ReflectionProbe unityReflectionProbe = transform.GetComponent<ReflectionProbe>();
+
+      if (unityReflectionProbe == null || !unityReflectionProbe.enabled) {
+        return;
       }
-    };
-
-    node.AddExtension(MX_ReflectionProbes.ExtensionName, nodeReflectionProbe);
-    reflectionProbes.Add(reflectionProbe);
-  }
-
-  private static void OnAfterSceneExport(GLTFSceneExporter exporter, GLTFRoot gltfRoot)
-  {
-    if (ReflectionProbe.defaultTexture != null) {
-      var scene = gltfRoot.Scenes[gltfRoot.Scene.Id];
 
       var reflectionProbe = new MX_ReflectionProbe() {
+        size = unityReflectionProbe.size.ToGltfVector3Raw(),
         reflectionProbeTexture = exporter.ExportTextureInfo(
-          ReflectionProbe.defaultTexture,
+          unityReflectionProbe.customBakedTexture == null ?
+            unityReflectionProbe.bakedTexture : unityReflectionProbe.customBakedTexture,
           GLTFSceneExporter.TextureMapType.CubeMap
-        ),
+        )
       };
 
-      var sceneReflectionProbe = new MX_ReflectionProbeRef() {
+      var nodeReflectionProbe = new MX_ReflectionProbeRef() {
         reflectionProbe = new ReflectionProbeId() {
           Id = reflectionProbes.Count,
           Root = gltfRoot
-        },
+        }
       };
 
-      scene.AddExtension(MX_ReflectionProbes.ExtensionName, sceneReflectionProbe);
-      exporter.DeclareExtensionUsage(MX_ReflectionProbes.ExtensionName, false);
+      node.AddExtension(MX_ReflectionProbes.ExtensionName, nodeReflectionProbe);
       reflectionProbes.Add(reflectionProbe);
     }
 
-    if (reflectionProbes.Count > 0) {
-      var extension = new MX_ReflectionProbes() {
-        reflectionProbes = new List<MX_ReflectionProbe>(reflectionProbes)
-      };
-      gltfRoot.AddExtension(MX_ReflectionProbes.ExtensionName, extension);
-      exporter.DeclareExtensionUsage(MX_ReflectionProbes.ExtensionName, false);
-      reflectionProbes.Clear();
+    private static void OnAfterSceneExport(GLTFSceneExporter exporter, GLTFRoot gltfRoot)
+    {
+      if (ReflectionProbe.defaultTexture != null) {
+        var scene = gltfRoot.Scenes[gltfRoot.Scene.Id];
+
+        var reflectionProbe = new MX_ReflectionProbe() {
+          reflectionProbeTexture = exporter.ExportTextureInfo(
+            ReflectionProbe.defaultTexture,
+            GLTFSceneExporter.TextureMapType.CubeMap
+          ),
+        };
+
+        var sceneReflectionProbe = new MX_ReflectionProbeRef() {
+          reflectionProbe = new ReflectionProbeId() {
+            Id = reflectionProbes.Count,
+            Root = gltfRoot
+          },
+        };
+
+        scene.AddExtension(MX_ReflectionProbes.ExtensionName, sceneReflectionProbe);
+        exporter.DeclareExtensionUsage(MX_ReflectionProbes.ExtensionName, false);
+        reflectionProbes.Add(reflectionProbe);
+      }
+
+      if (reflectionProbes.Count > 0) {
+        var extension = new MX_ReflectionProbes() {
+          reflectionProbes = new List<MX_ReflectionProbe>(reflectionProbes)
+        };
+        gltfRoot.AddExtension(MX_ReflectionProbes.ExtensionName, extension);
+        exporter.DeclareExtensionUsage(MX_ReflectionProbes.ExtensionName, false);
+        reflectionProbes.Clear();
+      }
     }
   }
 }

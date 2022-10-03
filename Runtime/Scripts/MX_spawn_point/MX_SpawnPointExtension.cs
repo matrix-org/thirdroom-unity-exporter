@@ -8,20 +8,23 @@ using UnityEditor;
 using UnityEngine;
 using UnityGLTF;
 
-public class SpawnPointExtensionConfig : ScriptableObject
+namespace ThirdRoom
 {
-
-  [InitializeOnLoadMethod]
-  static void InitExt()
+  public class SpawnPointExtensionConfig : ScriptableObject
   {
-    GLTFSceneExporter.AfterNodeExport += OnAfterNodeExport;
-  }
 
-  private static void OnAfterNodeExport(GLTFSceneExporter exporter, GLTFRoot gltfRoot, Transform transform, Node node)
-  {
-    if (transform.gameObject.GetComponent<SpawnPointBehaviour>() != null) {
-      node.AddExtension(MX_SpawnPoint.ExtensionName, new MX_SpawnPoint());
-      exporter.DeclareExtensionUsage(MX_SpawnPoint.ExtensionName, false);
+    [InitializeOnLoadMethod]
+    static void InitExt()
+    {
+      GLTFSceneExporter.AfterNodeExport += OnAfterNodeExport;
+    }
+
+    private static void OnAfterNodeExport(GLTFSceneExporter exporter, GLTFRoot gltfRoot, Transform transform, Node node)
+    {
+      if (transform.gameObject.GetComponent<SpawnPointBehaviour>() != null) {
+        node.AddExtension(MX_SpawnPoint.ExtensionName, new MX_SpawnPoint());
+        exporter.DeclareExtensionUsage(MX_SpawnPoint.ExtensionName, false);
+      }
     }
   }
 }
