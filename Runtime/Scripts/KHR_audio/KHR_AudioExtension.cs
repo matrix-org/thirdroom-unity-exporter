@@ -8,8 +8,9 @@ using Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityGLTF;
+using ThirdRoom.Exporter;
 
-namespace ThirdRoom
+namespace ThirdRoom.Exporter
 {
 
   public class AudioExtensionConfig : ScriptableObject

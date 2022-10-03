@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace ThirdRoom
+namespace ThirdRoom.Exporter
 {
     [CreateAssetMenu(fileName = "AudioSource", menuName = "UnityGLTF/AudioSource", order = 1)]
     public class AudioSourceScriptableObject : ScriptableObject

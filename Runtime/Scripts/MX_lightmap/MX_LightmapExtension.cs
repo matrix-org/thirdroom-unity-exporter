@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityGLTF;
 using Vector2 = GLTF.Math.Vector2;
 
-namespace ThirdRoom
+namespace ThirdRoom.Exporter
 {
 
   public class LightmapExtensionConfig : ScriptableObject

@@ -1,4 +1,4 @@
-namespace ThirdRoom
+namespace ThirdRoom.Exporter
 {
   public enum PositionalAudioDistanceModel {
     linear,

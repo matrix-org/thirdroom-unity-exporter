@@ -11,7 +11,7 @@ using UnityGLTF;
 using Vector3 = GLTF.Math.Vector3;
 using UnityGLTF.Extensions;
 
-namespace ThirdRoom
+namespace ThirdRoom.Exporter
 {
 
   public class ColliderExtensionConfig : ScriptableObject

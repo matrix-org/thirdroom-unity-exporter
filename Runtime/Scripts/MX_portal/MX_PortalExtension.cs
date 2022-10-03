@@ -8,7 +8,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityGLTF;
 
-namespace ThirdRoom
+namespace ThirdRoom.Exporter
 {
   public class MXPortalExtensionConfig : ScriptableObject
   {

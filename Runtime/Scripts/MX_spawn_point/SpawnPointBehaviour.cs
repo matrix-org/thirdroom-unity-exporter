@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ThirdRoom
+namespace ThirdRoom.Exporter
 {
   public class SpawnPointBehaviour : MonoBehaviour {
     private void OnDrawGizmos() {
