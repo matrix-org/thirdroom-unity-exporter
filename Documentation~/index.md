@@ -19,6 +19,8 @@ First you'll need a copy of Unity which can be downloaded [here](https://unity.c
 
 Internally we use Unity 2022.1.13f1, Unity versions 2018.3+ should be supported, but we can't make any promises. 2022.1+ would be preferred.
 
+We also recommend using the Universal Render Pipeline (URP) to maximize compatibility with UnityGLTF.
+
 This package depends on a branch of UnityGLTF that needs to be installed before you install the exporter.
 
 1. Open `Window > Package Manager`
