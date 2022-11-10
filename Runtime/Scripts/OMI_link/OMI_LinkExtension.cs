@@ -10,7 +10,7 @@ using UnityGLTF;
 
 namespace ThirdRoom.Exporter
 {
-  public class MXPortalExtensionConfig : ScriptableObject
+  public class OMILinkExtensionConfig : ScriptableObject
   {
 
     [InitializeOnLoadMethod]
@@ -21,11 +21,11 @@ namespace ThirdRoom.Exporter
 
     private static void OnAfterNodeExport(GLTFSceneExporter exporter, GLTFRoot gltfRoot, Transform transform, Node node)
     {
-      var portal = transform.gameObject.GetComponent<MXPortalBehaviour>();
+      var link = transform.gameObject.GetComponent<OMILinkBehaviour>();
 
-      if (portal != null) {
-        node.AddExtension(MX_Portal.ExtensionName, new MX_Portal() { uri = portal.uri });
-        exporter.DeclareExtensionUsage(MX_Portal.ExtensionName, false);
+      if (link != null) {
+        node.AddExtension(OMI_Link.ExtensionName, new OMI_Link() { uri = link.uri });
+        exporter.DeclareExtensionUsage(OMI_Link.ExtensionName, false);
       }
     }
   }
@@ -34,9 +34,9 @@ namespace ThirdRoom.Exporter
 namespace GLTF.Schema
 {
   [Serializable]
-  public class MX_Portal : IExtension
+  public class OMI_Link : IExtension
   {
-    public const string ExtensionName = "MX_portal";
+    public const string ExtensionName = "OMI_link";
 
     public string uri;
 
@@ -53,7 +53,7 @@ namespace GLTF.Schema
 
     public IExtension Clone(GLTFRoot root)
     {
-      return new MX_Portal() { uri = uri };
+      return new OMI_Link() { uri = uri };
     }
   }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ThirdRoom.Exporter
 {
-  public class MXPortalBehaviour : MonoBehaviour {
+  public class OMILinkBehaviour : MonoBehaviour {
     public string uri;
   }
 }
