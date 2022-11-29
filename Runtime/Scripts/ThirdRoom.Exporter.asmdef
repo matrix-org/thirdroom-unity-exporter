@@ -3,7 +3,9 @@
     "rootNamespace": "",
     "references": [
         "UnityGLTFScripts",
-        "GLTFSerialization"
+        "GLTFSerialization",
+        "Unity.RenderPipelines.Universal.Runtime",
+        "Unity.RenderPipelines.Core.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
