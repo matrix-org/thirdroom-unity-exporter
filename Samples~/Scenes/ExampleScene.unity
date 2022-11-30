@@ -1356,6 +1356,11 @@ PrefabInstance:
       propertyPath: uri
       value: matrix:r/uk-city-1:thirdroom.io
       objectReference: {fileID: 0}
+    - target: {fileID: 7023464135800388358, guid: e43a363f12ffb524aa6f28fe001299a1,
+        type: 3}
+      propertyPath: title
+      value: UK City
+      objectReference: {fileID: 0}
     - target: {fileID: 8370176020580018924, guid: e43a363f12ffb524aa6f28fe001299a1,
         type: 3}
       propertyPath: m_Name
