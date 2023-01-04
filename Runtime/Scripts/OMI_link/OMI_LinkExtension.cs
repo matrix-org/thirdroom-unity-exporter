@@ -24,7 +24,7 @@ namespace ThirdRoom.Exporter
       var link = transform.gameObject.GetComponent<OMILinkBehaviour>();
 
       if (link != null) {
-        node.AddExtension(OMI_Link.ExtensionName, new OMI_Link() { uri = link.uri });
+        node.AddExtension(OMI_Link.ExtensionName, new OMI_Link() { title = link.title, uri = link.uri });
         exporter.DeclareExtensionUsage(OMI_Link.ExtensionName, false);
       }
     }
@@ -39,6 +39,7 @@ namespace GLTF.Schema
     public const string ExtensionName = "OMI_link";
 
     public string uri;
+    public string title;
 
     public JProperty Serialize()
     {
@@ -47,13 +48,14 @@ namespace GLTF.Schema
       JProperty jProperty = new JProperty(ExtensionName, jo);
 
       jo.Add(nameof(uri), uri);
+      jo.Add(nameof(title), title);
 
       return jProperty;
     }
 
     public IExtension Clone(GLTFRoot root)
     {
-      return new OMI_Link() { uri = uri };
+      return new OMI_Link() { title = title, uri = uri };
     }
   }
 }

@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uri: matrix:r/terra-1:thirdroom.io
+  title: Terra-1
 --- !u!65 &9099209063909246833
 BoxCollider:
   m_ObjectHideFlags: 0
