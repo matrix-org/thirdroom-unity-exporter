@@ -1,1 +1,10 @@
+Projects/*/Library
+Projects/*/Logs
+Projects/*/Temp
+Projects/*/UserSettings
+Projects/*/Exports
+Projects/*/Builds
+Projects/*/*.sln
+Projects/*/*.csproj
+Projects/*/.idea
 .DS_Store

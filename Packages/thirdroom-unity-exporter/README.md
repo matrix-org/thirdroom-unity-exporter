@@ -25,7 +25,7 @@ After that is installed you can do the same thing for the Third Room Exporter:
 
 If you're interested installing the sample assets (recommended for first time users), click the import button on the right side of the package manager under "Samples".
 
-[Read the rest of the documentation here](/Packages/thirdroom-unity-exporter/Documentation~/index.md)
+[Read the rest of the documentation here](/Documentation~/index.md)
 
 ## Credits
 
