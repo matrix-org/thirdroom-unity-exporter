@@ -7,4 +7,6 @@ Projects/*/Builds
 Projects/*/*.sln
 Projects/*/*.csproj
 Projects/*/.idea
+Projects/*/obj
+Projects/*/mono_crash.*.json
 .DS_Store
