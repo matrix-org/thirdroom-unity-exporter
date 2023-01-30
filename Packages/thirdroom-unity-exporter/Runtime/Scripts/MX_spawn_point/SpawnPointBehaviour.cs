@@ -13,7 +13,7 @@ namespace ThirdRoom.Exporter
             var p1 = transform.position;
             var p2 = transform.position + new Vector3(0, height, 0);
 
-            using (new UnityEditor.Handles.DrawingScope(Gizmos.color, Gizmos.matrix))
+            using (new UnityEditor.Handles.DrawingScope(Color.green, Gizmos.matrix))
             {
                 Quaternion p1Rotation = Quaternion.LookRotation(p1 - p2);
                 Quaternion p2Rotation = Quaternion.LookRotation(p2 - p1);
@@ -44,8 +44,8 @@ namespace ThirdRoom.Exporter
         
                 Vector3 right = Quaternion.LookRotation(transform.forward) * Quaternion.Euler(0,180 + 20, 0) * new Vector3(0,0,1);
                 Vector3 left = Quaternion.LookRotation(transform.forward) * Quaternion.Euler(0,180-20,0) * new Vector3(0,0,1);
-                Gizmos.DrawRay(p3, right * 0.25f);
-                Gizmos.DrawRay(p3, left * 0.25f);
+                UnityEditor.Handles.DrawLine(p3, p3 + right * 0.25f);
+                UnityEditor.Handles.DrawLine(p3, p3 + left * 0.25f);
 
             }
           #endif

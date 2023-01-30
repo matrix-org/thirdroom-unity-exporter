@@ -32,12 +32,15 @@ namespace ThirdRoom.Exporter
         return;
       }
 
+      var cubemap = unityReflectionProbe.customBakedTexture == null ?
+            unityReflectionProbe.bakedTexture : unityReflectionProbe.customBakedTexture;
+      var texture = CubemapUtils.ConvertToEquirectangular(cubemap as Cubemap);
+
       var reflectionProbe = new MX_ReflectionProbe() {
         size = unityReflectionProbe.size.ToGltfVector3Raw(),
         reflectionProbeTexture = exporter.ExportTextureInfo(
-          unityReflectionProbe.customBakedTexture == null ?
-            unityReflectionProbe.bakedTexture : unityReflectionProbe.customBakedTexture,
-          GLTFSceneExporter.TextureMapType.CubeMap
+          texture,
+          GLTFSceneExporter.TextureMapType.Linear
         )
       };
 
@@ -57,11 +60,14 @@ namespace ThirdRoom.Exporter
       if (ReflectionProbe.defaultTexture != null) {
         var scene = gltfRoot.Scenes[gltfRoot.Scene.Id];
 
+        var cubemap = ReflectionProbe.defaultTexture as Cubemap;
+        var texture = CubemapUtils.ConvertToEquirectangular(cubemap);
+
         var reflectionProbe = new MX_ReflectionProbe() {
           reflectionProbeTexture = exporter.ExportTextureInfo(
-            ReflectionProbe.defaultTexture,
-            GLTFSceneExporter.TextureMapType.CubeMap
-          ),
+            texture,
+            GLTFSceneExporter.TextureMapType.Linear
+          )
         };
 
         var sceneReflectionProbe = new MX_ReflectionProbeRef() {

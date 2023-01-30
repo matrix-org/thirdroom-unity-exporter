@@ -72,17 +72,19 @@ namespace ThirdRoom.Exporter
         var renderer = transform.GetComponent<MeshRenderer>();
         var meshFilter = transform.GetComponent<MeshFilter>();
 
-        var key = new GLTFSceneExporter.PrimKey();
+        var uniquePrimitives = new List<GLTFSceneExporter.UniquePrimitive>();
+
+        var primitive = new GLTFSceneExporter.UniquePrimitive();
 
         if (meshFilter.sharedMesh == meshCollider.sharedMesh) {
-          key.Mesh = meshFilter.sharedMesh;
-          key.Materials = renderer.sharedMaterials;
+          primitive.Mesh = meshFilter.sharedMesh;
+          primitive.Materials = renderer.sharedMaterials;
         } else {
-          key.Mesh = meshCollider.sharedMesh;
-          key.Materials = renderer.sharedMaterials;
+          primitive.Mesh = meshCollider.sharedMesh;
+          primitive.Materials = renderer.sharedMaterials;
         }
 
-        var meshId = exporter.ExportMesh(meshCollider.name, new GLTFSceneExporter.PrimKey[1]{ key });
+        var meshId = exporter.ExportMesh(meshCollider.name, uniquePrimitives);
 
         collider = new GLTFCollider() {
           type = ColliderType.mesh,

@@ -27,18 +27,43 @@ namespace ThirdRoom.Exporter
       if (RenderSettings.skybox != null) {
         var scene = gltfRoot.Scenes[gltfRoot.Scene.Id];
 
-        
+        var sun = RenderSettings.sun;
+
+        if (sun == null) {
+          var lights = FindObjectsOfType<Light>();
+          
+          foreach (var light in lights) {
+            if (light.type == LightType.Directional) {
+              sun = light;
+              break;
+            }
+          }
+        }
+
+        var cubemapVisibleLayer = 31;
+        int originalSunLayer = 0;
+
+        if (sun != null) {
+          originalSunLayer = sun.gameObject.layer;
+          sun.gameObject.layer = cubemapVisibleLayer;
+        }
 
         var go = new GameObject("SkyboxCamera");
         var camera = go.AddComponent<Camera>();
-        camera.cullingMask = 0;
+        camera.cullingMask = 1 << cubemapVisibleLayer;
         var skybox = new Cubemap(1024, UnityEngine.Experimental.Rendering.DefaultFormat.LDR, 0);
         camera.RenderToCubemap(skybox);
 
+        if (sun != null) {
+          sun.gameObject.layer = originalSunLayer;
+        }
+
+        var texture = CubemapUtils.ConvertToEquirectangular(skybox);
+
         var background = new MX_Background() {
           backgroundTexture = exporter.ExportTextureInfo(
-            skybox,
-            GLTFSceneExporter.TextureMapType.CubeMap
+            texture,
+            GLTFSceneExporter.TextureMapType.sRGB
           ),
         };
 

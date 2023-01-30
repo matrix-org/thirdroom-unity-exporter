@@ -1,4 +1,4 @@
 [submodule "Packages/matrix-org-UnityGLTF"]
 	path = Packages/matrix-org-UnityGLTF
 	url = https://github.com/matrix-org/UnityGLTF.git
-	branch = export-files
+	branch = thirdroom/export-files

@@ -2,8 +2,8 @@
   "dependencies": {
     "com.unity.ide.vscode": "1.2.5",
     "com.unity.render-pipelines.universal": "12.1.9",
-    "io.thirdroom.exporter": "file:/Users/robertlong/thirdroom/thirdroom-unity-exporter/Packages/thirdroom-unity-exporter",
-    "org.khronos.unitygltf": "file:/Users/robertlong/thirdroom/thirdroom-unity-exporter/Packages/matrix-org-UnityGLTF/UnityGLTF/Assets/UnityGLTF",
+    "io.thirdroom.exporter": "file:../../../Packages/thirdroom-unity-exporter",
+    "org.khronos.unitygltf": "file:../../../Packages/matrix-org-UnityGLTF/UnityGLTF/Assets/UnityGLTF",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",

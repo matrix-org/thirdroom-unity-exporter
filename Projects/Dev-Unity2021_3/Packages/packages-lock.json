@@ -77,7 +77,7 @@
       }
     },
     "io.thirdroom.exporter": {
-      "version": "file:/Users/robertlong/thirdroom/thirdroom-unity-exporter/Packages/thirdroom-unity-exporter",
+      "version": "file:../../../Packages/thirdroom-unity-exporter",
       "depth": 0,
       "source": "local",
       "dependencies": {
@@ -86,7 +86,7 @@
       }
     },
     "org.khronos.unitygltf": {
-      "version": "file:/Users/robertlong/thirdroom/thirdroom-unity-exporter/Packages/matrix-org-UnityGLTF/UnityGLTF/Assets/UnityGLTF",
+      "version": "file:../../../Packages/matrix-org-UnityGLTF/UnityGLTF/Assets/UnityGLTF",
       "depth": 0,
       "source": "local",
       "dependencies": {
