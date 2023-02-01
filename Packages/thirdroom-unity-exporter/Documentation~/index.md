@@ -25,7 +25,7 @@ This package depends on a branch of UnityGLTF that needs to be installed before 
 
 1. Open `Window > Package Manager`
 2. In Package Manager, click <kbd>+</kbd> and select <kbd>Add Package from git URL</kbd>
-3. Paste ```https://github.com/matrix-org/UnityGLTF.git?path=/UnityGLTF/Assets/UnityGLTF#export-files```
+3. Paste ```https://github.com/matrix-org/UnityGLTF.git?path=/UnityGLTF/Assets/UnityGLTF#thirdroom/dev```
 4. Click <kbd>Add</kbd>.
 
 After that is installed you can do the same thing for the Third Room Exporter:
