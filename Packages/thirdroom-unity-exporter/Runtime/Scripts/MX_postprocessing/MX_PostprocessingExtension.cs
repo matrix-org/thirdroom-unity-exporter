@@ -44,7 +44,9 @@ namespace ThirdRoom.Exporter
 
         if (profile.TryGet<Bloom>(out bloom)) {
           var bloomEffect = new MX_BloomEffect();
-          bloomEffect.strength = bloom.intensity.value / 10.0f;
+          bloomEffect.strength = bloom.intensity.value / 2;
+          bloomEffect.threshold = bloom.threshold.value;
+          bloomEffect.radius = bloom.scatter.value / 2;
           postprocessing.bloom = bloomEffect;
         }
 
@@ -62,11 +64,15 @@ namespace GLTF.Schema
   public class MX_BloomEffect : GLTFChildOfRootProperty {
 
     public float strength;
+    public float threshold;
+    public float radius;
 
     public virtual JObject Serialize() {
       var jo = new JObject();
 
       jo.Add(nameof(strength), strength);
+      jo.Add(nameof(threshold), threshold);
+      jo.Add(nameof(radius), radius);
 
       return jo;
     }
