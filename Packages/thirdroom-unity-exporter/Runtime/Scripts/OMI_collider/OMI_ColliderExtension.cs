@@ -84,6 +84,8 @@ namespace ThirdRoom.Exporter
           primitive.Materials = renderer.sharedMaterials;
         }
 
+        uniquePrimitives.Add(primitive);
+
         var meshId = exporter.ExportMesh(meshCollider.name, uniquePrimitives);
 
         collider = new GLTFCollider() {
