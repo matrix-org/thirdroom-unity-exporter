@@ -16,6 +16,9 @@ Shader "Hidden/CubemapToEquirectangular" {
 				#pragma fragmentoption ARB_precision_hint_fastest
 				#include "UnityCG.cginc"
 
+				#define PI 3.141592653589793
+				#define TWOPI 6.283185307179587
+
 				struct v2f {
 					float4 pos : POSITION;
 					float2 uv : TEXCOORD0;
@@ -24,28 +27,27 @@ Shader "Hidden/CubemapToEquirectangular" {
 				samplerCUBE _MainTex;
         float4x4 _CubemapRotation;
 
-				#define PI 3.141592653589793
-				#define HALFPI 1.57079632679
-
 				v2f vert( appdata_img v )
 				{
 					v2f o;
 					o.pos = UnityObjectToClipPos(v.vertex);
-					float2 uv = v.texcoord.xy * 2 - 1;
-					uv *= float2(PI, HALFPI);
-					o.uv = uv;
+					o.uv = v.texcoord.xy * float2(TWOPI, PI);
 					return o;
 				}
 
-				fixed4 frag(v2f i) : COLOR
+				fixed4 frag(v2f i) : COLOR 
 				{
-					float cosy = cos(i.uv.y);
-					float3 normal = float3(0,0,0);
-					normal.x = cos(i.uv.x) * cosy;
-					normal.y = i.uv.y;
-					normal.z = cos(i.uv.x - HALFPI) * cosy;
-          normal = mul(_CubemapRotation, float4(normal, 1.0));
-					return texCUBE(_MainTex, normal);
+					float theta = i.uv.y;
+					float phi = i.uv.x;
+					float3 unit = float3(0,0,0);
+
+					unit.x = sin(phi) * sin(theta) * -1;
+					unit.y = cos(theta) * -1;
+					unit.z = cos(phi) * sin(theta) * -1;
+
+					unit = mul(_CubemapRotation, float4(unit, 1.0)).xyz;
+
+					return texCUBE(_MainTex, unit);
 				}
 			ENDCG
 		}
