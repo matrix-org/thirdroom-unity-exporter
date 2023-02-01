@@ -58,7 +58,7 @@ namespace ThirdRoom.Exporter
 
       var lightMapTexture = exporter.ExportTextureInfo(
         lightmap.lightmapColor,
-        GLTFSceneExporter.TextureMapType.Custom_Unknown
+        GLTFSceneExporter.TextureMapType.Linear
       );
 
       var scale = new Vector2(

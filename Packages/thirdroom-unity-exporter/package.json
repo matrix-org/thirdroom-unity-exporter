@@ -1,7 +1,7 @@
 {
   "name": "io.thirdroom.exporter",
   "displayName": "Third Room Unity Exporter",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "unity": "2018.3",
   "description": "Export Third Room scenes from Unity.",
   "keywords": [

@@ -118,13 +118,21 @@ namespace ThirdRoom.Exporter
             throw new Exception("Unsupported audio file type \"" + fileExtension + "\", only .mp3 is supported.");
           }
 
-          var fileDescriptor = exporter.ExportFile(path, "audio/mpeg");
+          KHR_AudioData audio;
 
-          var audio = new KHR_AudioData() {
-            mimeType = fileDescriptor.mimeType,
-            bufferView = fileDescriptor.bufferView,
-            uri = fileDescriptor.uri,
-          };
+          if (exporter.shouldUseInternalBuffer) {
+            var data = File.ReadAllBytes(path);
+            var bufferView = exporter.ExportBufferView(data);
+
+            audio = new KHR_AudioData() {
+              mimeType = "audio/mpeg",
+              bufferView = bufferView,
+            };
+          } else {
+            audio = new KHR_AudioData() {
+              uri = exporter.ExportFile(path),
+            };
+          }
 
           audioData.Add(audio);
         }

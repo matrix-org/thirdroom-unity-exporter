@@ -17,22 +17,28 @@
 
 First you'll need a copy of Unity which can be downloaded [here](https://unity.com/download).
 
-Internally we use Unity 2022.1.13f1, Unity versions 2018.3+ should be supported, but we can't make any promises. 2022.1+ would be preferred.
+Internally we use Unity 2021.3.17f1 (LTS), Unity versions 2020.3+ should be supported, but we can't make any promises. 2021.3+ would be preferred.
 
-We also recommend using the Universal Render Pipeline (URP) to maximize compatibility with UnityGLTF.
+You should use the Universal Render Pipeline (URP) to maximize compatibility with UnityGLTF.
 
 This package depends on a branch of UnityGLTF that needs to be installed before you install the exporter.
 
 1. Open `Window > Package Manager`
 2. In Package Manager, click <kbd>+</kbd> and select <kbd>Add Package from git URL</kbd>
-3. Paste ```https://github.com/matrix-org/UnityGLTF.git?path=/UnityGLTF/Assets/UnityGLTF#export-files```
+3. Paste ```https://github.com/matrix-org/UnityGLTF.git?path=/UnityGLTF/Assets/UnityGLTF#thirdroom/dev```
 4. Click <kbd>Add</kbd>.
 
 After that is installed you can do the same thing for the Third Room Exporter:
 
 1. In Package Manager, click <kbd>+</kbd> and select <kbd>Add Package from git URL</kbd>
-2. Paste ```https://github.com/matrix-org/thirdroom-unity-exporter.git```
+2. Paste ```https://github.com/matrix-org/thirdroom-unity-exporter.git?path=/Packages/thirdroom-unity-exporter```
 3. Click <kbd>Add</kbd>.
+
+You'll also probably want to add the Sample Scenes which contains an example scene, a portal asset, and default settings assets for you to use in your project.
+
+Install the sample scenes in the Package Manager by pressing <kbd>Import</kbd> under the Samples dropdown.
+
+![Import Samples](./Images/ImportSamples.png)
 
 ## Scene Setup
 
@@ -42,11 +48,11 @@ Whether you're working with an existing scene or starting one from scratch there
 
 1. Open `Edit > Project Settings...`
 2. Ensure that <kbd>Color Space</kbd> is set to `Linear`
-3. Ensure that <kbd>Lightmap Encoding</kbd> is set to `Normal Quality`. This will ensure that the lightmaps are encoded as RGBM
-4. Ensure that <kbd>HDR Cubemap Encoding</kbd> is set to `Normal Quality`. This will ensure that the cubemaps are encoded as RGBM 
+3. Ensure that <kbd>Lightmap Encoding</kbd> is set to `Normal Quality`
 
 ![Project Settings](./Images/ProjectSettings.png)
 
+If these settings aren't set, your lighting may look fine in Unity, but it'll look off when exporting and importing into Third Room.
 
 ### Materials
 
@@ -120,13 +126,17 @@ Typically you should pick the simplest collider for your meshes instead of using
 
 The Third Room Unity Exporter will export the skybox set in the scene's environment settings.
 
+You'll want to make sure a couple settings are set here for best results:
+1. Set the environment reflection resolution to 128 (or whatever resolution your reflection probes are set to)
+2. Set the environment reflection compression to `Uncompressed`. We're going to compress with Basis Universal anyway so no need to compress twice.
+
+![Skybox Settings](./Images/Skybox.png)
+
 To set your own skybox:
 
 1. Open `Window > Rendering > Lighting`
 2. Open the `Environment` tab
 3. Replace the skybox material with any compatible material.
-
-![Skybox Settings](./Images/Skybox.png)
 
 Upon export the skybox will be captured as a cubemap and exported. Dynamic skybox shaders will be captured as they are.
 
@@ -138,19 +148,11 @@ Portals represent links to other Worlds across the Matrix network and eventually
 
 The thirdroom-unity-exporter package contains a default portal prefab in the samples that you may have imported from the Package Manager window.
 
-If you haven't imported the samples yet you can do so by:
-
-1. Open `Window > Package Manager`
-2. Select the `Third Room Unity Exporter` package.
-3. On the right hand side of the window, under `Samples`, there should be an item labeled `Sample Scenes` click the `Import` button next to it.
-
-Now you can use the portal prefab:
-
 1. In the Project go to the `Samples > Third Room Unity Exporter > x.x.x > Sample Scenes > Prefabs` directory.
 2. Drag the `Portal` prefab into your scene where you want to place it.
-3. Select the `PortalTarget` object inside the Portal GameObject you just placed in the `Hierarchy` panel.
+3. Select the `Portal Target` object inside the Portal GameObject you just placed in the `Hierarchy` panel.
 4. In the inspector there is a component `MX Portal Behaviour` with a single property `Uri`. You can change this to any Matrix Room URI (we'll explain the URI format below). For now you can keep this set to `matrix:r/terra-1:thirdroom.io` which represents a link to the room `#terra-1:thirdroom.io`
-5. Replace the thumbnail of the portal by replacing the material on the prefab's `Circle` object. We recommend that you set the `Render Face` to `Both` and set both a `Base Color Map` and `Emissive Map` so that the portal can be seen from both sides and seems to glow even in dark environments.
+5. Replace the thumbnail of the portal by replacing the material on the prefab's `Portal Thumbnail` object. We recommend that you set the `Render Face` to `Both` and set both a `Base Color Map` and `Emissive Map` so that the portal can be seen from both sides and seems to glow even in dark environments.
 
 ![Portal Hierarchy](./Images/PortalHierarchy.png)
 
@@ -236,12 +238,14 @@ If you're new to baked lighting in Unity you can read more on the process [here]
 
 ### Lightmap Settings
 
-Included in the samples directory is a `MX_LightmapLightingSettings` file which has some decent default lighting settings for most scenes.
+Included in the samples directory is a `ThirdRoomDefaultLightingSettings` file which has some decent default lighting settings for most scenes.
 
 The important bits of the lighting settings are:
 
 - Lighting Mode: `Baked Indirect`
 - Directional Mode: `Non-Directional`
+
+You may have to tweak the lightmap resolution depending on the size and complexity of your scene. If it's taking too long start low with something like 4 texels per unit and work your way up. You may also want to boost your max lightmap size to reduce the number of lightmaps needed and reduce the wasted space on your lightmaps. Experiment with different settings until you get the look and file size you want.
 
 ![Lighting Settings](./Images/LightingSettings.png)
 
@@ -262,6 +266,12 @@ Third Room also uses the Environment Reflections settings in the Lighting window
 - Resolution: `128` or whatever you set for all the other reflection probes.
 
 ![Reflection Probe Settings](./Images/ReflectionProbe.png)
+
+## Postprocessing
+
+We support exporting your global Unity Postprocessing settings. Currently we only support the following properties from Bloom: threshold, intensity, and scatter.
+
+![Bloom Settings](./Images/BloomSettings.png)
 
 ## Optimization and Uploading
 
