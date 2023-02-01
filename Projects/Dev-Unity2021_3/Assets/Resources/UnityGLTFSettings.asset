@@ -27,3 +27,4 @@ MonoBehaviour:
   blendShapeExportProperties: -1
   blendShapeExportSparseAccessors: 1
   exportVertexColors: 1
+  UseCaching: 1
