@@ -6,7 +6,16 @@ Export Third Room scenes from Unity. Powered by [UnityGLTF](https://github.com/p
 
 First you'll need a copy of Unity which can be downloaded [here](https://unity.com/download).
 
-Internally we use Unity 2021.3.17f1 (LTS), Unity versions 2020.3+ should be supported, but we can't make any promises. 2021.3+ would be preferred.
+### Versions
+- **Recommended:** 2022.1.13f1 ([Unity Hub Link](unityhub://2022.1.13f1/22856944e6d2))
+- Supported: 2021.3+
+- Unsupported but potentially compatible: 2020.3+
+
+Unity 2021 does not have support for HDR Cubemaps which we use for reflection probes. If you'd like support for them, use Unity 2022.
+
+### Installation
+
+We recommend first starting with creating a brand new project in Unity Hub.
 
 You should use the Universal Render Pipeline (URP) to maximize compatibility with UnityGLTF.
 

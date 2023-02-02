@@ -49,6 +49,7 @@ Whether you're working with an existing scene or starting one from scratch there
 1. Open `Edit > Project Settings...`
 2. Ensure that <kbd>Color Space</kbd> is set to `Linear`
 3. Ensure that <kbd>Lightmap Encoding</kbd> is set to `Normal Quality`
+4. If you're using Unity 2022, ensure that <kbd>HDR Cubemap Encoding</kbd> is set to `Normal Quality`
 
 ![Project Settings](./Images/ProjectSettings.png)
 
