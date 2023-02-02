@@ -18,11 +18,29 @@ namespace ThirdRoom.Exporter
     [InitializeOnLoadMethod]
     static void InitExt()
     {
+      GLTFSceneExporter.BeforeSceneExport += OnBeforeSceneExport;
       GLTFSceneExporter.AfterSceneExport += OnAfterSceneExport;
       GLTFSceneExporter.AfterNodeExport += OnAfterNodeExport;
     }
 
+    public static void OnBeforeSceneExport(GLTFSceneExporter exporter, GLTFRoot gltfRoot) {
+      if (LightmapSettings.lightmapsMode != LightmapsMode.NonDirectional) {
+        throw new Exception("Please set your lightmap directional mode to Non Directional");
+      }
+
+      if (Lightmapping.lightingSettings.mixedBakeMode != MixedLightingMode.IndirectOnly) {
+        throw new Exception("Please set your lighting mode to Baked Indirect.");
+      }
+    }
+
     private static bool beforeSceneHookCalled = false;
+
+    private static GLTFSceneExporter.TextureExportSettings textureExportSettings = new GLTFSceneExporter.TextureExportSettings {
+      conversion = GLTFSceneExporter.TextureExportSettings.Conversion.None,
+      linear = true,
+      alphaMode = GLTFSceneExporter.TextureExportSettings.AlphaMode.Always,
+      isValid = true,
+    };
 
     private static void OnAfterNodeExport(GLTFSceneExporter exporter, GLTFRoot gltfRoot, Transform transform, Node node)
     {
@@ -58,8 +76,16 @@ namespace ThirdRoom.Exporter
 
       var lightMapTexture = exporter.ExportTextureInfo(
         lightmap.lightmapColor,
-        GLTFSceneExporter.TextureMapType.Linear
+        GLTFSceneExporter.TextureMapType.Linear,
+        textureExportSettings
       );
+
+      var texture = gltfRoot.Textures[lightMapTexture.Index.Id];
+
+      if (texture.Extensions == null || !texture.Extensions.ContainsKey(MX_TextureRGBM.ExtensionName)) {
+        texture.AddExtension(MX_TextureRGBM.ExtensionName, new MX_TextureRGBM());
+        exporter.DeclareExtensionUsage(MX_TextureRGBM.ExtensionName, false);
+      }
 
       var scale = new Vector2(
           meshRenderer.lightmapScaleOffset.x,

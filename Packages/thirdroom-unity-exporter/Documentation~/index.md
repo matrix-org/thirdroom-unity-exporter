@@ -54,6 +54,13 @@ Whether you're working with an existing scene or starting one from scratch there
 
 If these settings aren't set, your lighting may look fine in Unity, but it'll look off when exporting and importing into Third Room.
 
+### Render Pipeline Settings
+
+You can find your render pipeline assets in your project's `Settings` directory. New projects are typically set up to use the High Fidelity render pipeline while in the editor.
+Open up the asset and ensure that HDR is turned on. It should be already.
+
+![HDR Render Pipeline Settings](./Images/HDRRenderPipeline.png)
+
 ### Materials
 
 We find that the `UnityGLTF/PBRGraph` material works best for exported scenes. You can convert to `UnityGLTF/PBRGraph` material from the following shaders with automatic conversions:
@@ -259,7 +266,7 @@ Reflection probes should have the following settings set:
 - Box Projection: Should be unchecked, Third Room doesn't support it.
 - Box Offset: Should be set to 0,0,0 Third Room doesn't support it.
 - Resolution: `128` recommended for performance, you can change the resolution, but the important thing is that they are all the same.
-- HDR: Should be checked
+- HDR: Must be checked
 
 Third Room also uses the Environment Reflections settings in the Lighting window under the Environment tab. They should be set to:
 - Source: `Skybox`

@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityGLTF;
 using Vector3 = GLTF.Math.Vector3;
 using UnityGLTF.Extensions;
+using UnityEngine.Rendering.Universal;
 
 namespace ThirdRoom.Exporter
 {
@@ -18,11 +19,77 @@ namespace ThirdRoom.Exporter
     [InitializeOnLoadMethod]
     static void InitExt()
     {
+      GLTFSceneExporter.BeforeSceneExport += OnBeforeSceneExport;
       GLTFSceneExporter.AfterNodeExport += OnAfterNodeExport;
       GLTFSceneExporter.AfterSceneExport += OnAfterSceneExport;
     }
 
+    public static void OnBeforeSceneExport(GLTFSceneExporter exporter, GLTFRoot gltfRoot) {
+      if (QualitySettings.activeColorSpace != ColorSpace.Linear) {
+        throw new Exception("Please set your project's color space to linear.");
+      }
+
+      var renderPipeline = QualitySettings.renderPipeline as UniversalRenderPipelineAsset;
+
+      if (!renderPipeline.supportsHDR) {
+        throw new Exception("Please ensure that HDR is enabled in your render pipeline");
+      }
+    }
+
+    private static GLTFSceneExporter.TextureExportSettings textureExportSettings = new GLTFSceneExporter.TextureExportSettings {
+      conversion = GLTFSceneExporter.TextureExportSettings.Conversion.None,
+      linear = true,
+      alphaMode = GLTFSceneExporter.TextureExportSettings.AlphaMode.Always,
+      isValid = true,
+    };
+
     private static List<MX_ReflectionProbe> reflectionProbes = new List<MX_ReflectionProbe>();
+
+    private static MX_ReflectionProbe CreateReflectionProbe(GLTFSceneExporter exporter, GLTFRoot gltfRoot, string name, Cubemap cubemap, float hdrRange, GLTF.Math.Vector3? size) {
+      if (cubemap == null) {
+        Debug.LogWarningFormat("Missing cubemap for node {0}", name);
+        return null;
+      }
+
+      var texture = CubemapUtils.ConvertToEquirectangular(cubemap as Cubemap);
+
+      bool useRGBM = true;
+
+      if (Mathf.Approximately(hdrRange, 1.0f)) {
+        useRGBM = false;
+      } else if (!Mathf.Approximately(hdrRange, 34.49324f)) {
+        Debug.LogWarningFormat("Unexpected HDR settings for reflection probe on \"{0}\". Ensure that the HDR Cubemap Encoding setting is set to normal.", name);
+        return null;
+      }
+      
+      var reflectionProbe = new MX_ReflectionProbe() {
+        reflectionProbeTexture = exporter.ExportTextureInfo(
+          texture,
+          GLTFSceneExporter.TextureMapType.Linear,
+          textureExportSettings
+        )
+      };
+
+      if (size.HasValue) {
+        reflectionProbe.size = size.Value;
+      }
+
+      if (useRGBM) {
+
+        var reflectionProbeTextureInfo = reflectionProbe.reflectionProbeTexture;
+        var reflectionProbeTexture = gltfRoot.Textures[reflectionProbeTextureInfo.Index.Id];
+        
+        if (
+          reflectionProbeTexture.Extensions == null ||
+          !reflectionProbeTexture.Extensions.ContainsKey(MX_TextureRGBM.ExtensionName)
+        ) {
+          reflectionProbeTexture.AddExtension(MX_TextureRGBM.ExtensionName, new MX_TextureRGBM());
+          exporter.DeclareExtensionUsage(MX_TextureRGBM.ExtensionName, false);
+        }
+      }
+
+      return reflectionProbe;
+    }
 
     private static void OnAfterNodeExport(GLTFSceneExporter exporter, GLTFRoot gltfRoot, Transform transform, Node node)
     {
@@ -32,17 +99,25 @@ namespace ThirdRoom.Exporter
         return;
       }
 
+      var renderPipeline = QualitySettings.renderPipeline as UniversalRenderPipelineAsset;
+
+      if (!unityReflectionProbe.hdr) {
+        Debug.LogWarningFormat("Please enable the HDR setting on reflection probe \"{0}\".", transform.name);
+        return;
+      }
+
       var cubemap = unityReflectionProbe.customBakedTexture == null ?
             unityReflectionProbe.bakedTexture : unityReflectionProbe.customBakedTexture;
-      var texture = CubemapUtils.ConvertToEquirectangular(cubemap as Cubemap);
 
-      var reflectionProbe = new MX_ReflectionProbe() {
-        size = unityReflectionProbe.size.ToGltfVector3Raw(),
-        reflectionProbeTexture = exporter.ExportTextureInfo(
-          texture,
-          GLTFSceneExporter.TextureMapType.Linear
-        )
-      };
+      var size = unityReflectionProbe.size.ToGltfVector3Raw();
+      var hdrRange = unityReflectionProbe.textureHDRDecodeValues[0];
+
+      var reflectionProbe = CreateReflectionProbe(
+        exporter, gltfRoot, transform.name, cubemap as Cubemap, hdrRange, size);
+
+      if (reflectionProbe == null) {
+        return;
+      }
 
       var nodeReflectionProbe = new MX_ReflectionProbeRef() {
         reflectionProbe = new ReflectionProbeId() {
@@ -61,14 +136,14 @@ namespace ThirdRoom.Exporter
         var scene = gltfRoot.Scenes[gltfRoot.Scene.Id];
 
         var cubemap = ReflectionProbe.defaultTexture as Cubemap;
-        var texture = CubemapUtils.ConvertToEquirectangular(cubemap);
+        var hdrRange = ReflectionProbe.defaultTextureHDRDecodeValues[0];
 
-        var reflectionProbe = new MX_ReflectionProbe() {
-          reflectionProbeTexture = exporter.ExportTextureInfo(
-            texture,
-            GLTFSceneExporter.TextureMapType.Linear
-          )
-        };
+        var reflectionProbe = CreateReflectionProbe(
+          exporter, gltfRoot, "Scene", cubemap, hdrRange, null);
+
+        if (reflectionProbe == null) {
+          return;
+        }
 
         var sceneReflectionProbe = new MX_ReflectionProbeRef() {
           reflectionProbe = new ReflectionProbeId() {
