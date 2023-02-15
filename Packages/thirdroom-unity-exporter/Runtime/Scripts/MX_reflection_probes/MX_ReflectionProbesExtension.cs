@@ -31,7 +31,7 @@ namespace ThirdRoom.Exporter
 
       var renderPipeline = QualitySettings.renderPipeline as UniversalRenderPipelineAsset;
 
-      if (!renderPipeline.supportsHDR) {
+      if (renderPipeline != null && !renderPipeline.supportsHDR) {
         throw new Exception("Please ensure that HDR is enabled in your render pipeline");
       }
     }
