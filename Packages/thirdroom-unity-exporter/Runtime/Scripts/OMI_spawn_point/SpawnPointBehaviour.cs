@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ThirdRoom.Exporter
 {
   public class SpawnPointBehaviour : MonoBehaviour {
-	public string title;
+    public string title;
     public string team;
     public string group;
 
