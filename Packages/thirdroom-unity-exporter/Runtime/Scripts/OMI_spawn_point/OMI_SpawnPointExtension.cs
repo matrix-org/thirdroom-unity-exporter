@@ -22,7 +22,6 @@ namespace ThirdRoom.Exporter
     private static void OnAfterNodeExport(GLTFSceneExporter exporter, GLTFRoot gltfRoot, Transform transform, Node node)
     {
       var spawnPoint = transform.gameObject.GetComponent<SpawnPointBehaviour>();
-      debug.Log("SpawnPointExtensionConfig: " + spawnPoint);
       if (spawnPoint != null) {
         node.AddExtension(OMI_SpawnPoint.ExtensionName, new OMI_SpawnPoint() { title = spawnPoint.title, team = spawnPoint.team, group = spawnPoint.group });
         exporter.DeclareExtensionUsage(OMI_SpawnPoint.ExtensionName, false);
