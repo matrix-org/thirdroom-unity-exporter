@@ -35,6 +35,8 @@ namespace ThirdRoom.Exporter
         node.AddExtension(OMI_PhysicsBody.ExtensionName, new OMI_PhysicsBody() {
           type = collider.isTrigger ? "trigger" : "static"
         });
+
+        exporter.DeclareExtensionUsage(OMI_PhysicsBody.ExtensionName, false);
       } else if (rigidBody != null) {
         string type;
 
