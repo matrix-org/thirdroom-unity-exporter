@@ -26,12 +26,13 @@ namespace ThirdRoom.Exporter
      private static void OnAfterNodeExport(GLTFSceneExporter exporter, GLTFRoot gltfRoot, Transform transform, Node node) {
       Collider collider = transform.GetComponent<Collider>();
       Rigidbody rigidBody = transform.GetComponent<Rigidbody>();
+      Rigidbody parentRigidBody = transform.parent != null ? transform.parent.GetComponent<Rigidbody>() : null;
 
       if (collider == null) {
         return;
       }
 
-      if (rigidBody == null) {
+      if (rigidBody == null && parentRigidBody == null) {
         node.AddExtension(OMI_PhysicsBody.ExtensionName, new OMI_PhysicsBody() {
           type = collider.isTrigger ? "trigger" : "static"
         });
