@@ -44,11 +44,14 @@ namespace ThirdRoom.Exporter
       GLTFCollider collider;
       UnityEngine.Vector3 center = UnityEngine.Vector3.zero;
 
+      bool isTrigger = unityCollider.isTrigger;
+
       if (unityCollider.GetType() == typeof(BoxCollider)) {
         var boxCollider = unityCollider as BoxCollider;
         collider = new GLTFCollider() {
           type = ColliderType.box,
           extents = (boxCollider.size / 2).ToGltfVector3Raw(),
+          isTrigger = isTrigger,
         };
         center = boxCollider.center;
       } else if (unityCollider.GetType() == typeof(SphereCollider)) {
@@ -56,6 +59,7 @@ namespace ThirdRoom.Exporter
         collider = new GLTFCollider() {
           type = ColliderType.sphere,
           radius = sphereCollider.radius,
+          isTrigger = isTrigger,
         };
         center = sphereCollider.center;
       } else if (unityCollider.GetType() == typeof(CapsuleCollider)) {
@@ -64,6 +68,7 @@ namespace ThirdRoom.Exporter
           type = ColliderType.capsule,
           radius = capsuleCollider.radius,
           height = capsuleCollider.height,
+          isTrigger = isTrigger,
         };
         center = capsuleCollider.center;
       } else if (unityCollider.GetType() == typeof(MeshCollider)) {
@@ -91,6 +96,7 @@ namespace ThirdRoom.Exporter
         collider = new GLTFCollider() {
           type = ColliderType.mesh,
           mesh = meshId,
+          isTrigger = isTrigger,
         };
       } else {
         Debug.LogFormat("Unsupported collider type {0} on {1}", unityCollider.GetType(), transform.name);
@@ -196,6 +202,7 @@ namespace GLTF.Schema
     public float radius;
     public float height;
     public MeshId mesh;
+    public bool isTrigger;
 
     public JObject Serialize() {
       var jo = new JObject();
@@ -217,7 +224,10 @@ namespace GLTF.Schema
       if (mesh != null) {
         jo.Add(new JProperty(nameof(mesh), mesh.Id));
       }
-      
+
+      if (isTrigger) {
+        jo.Add(new JProperty(nameof(isTrigger), isTrigger));
+      }
 
       return jo;
     }

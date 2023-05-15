@@ -34,7 +34,7 @@ namespace ThirdRoom.Exporter
 
       if (rigidBody == null && parentRigidBody == null) {
         node.AddExtension(OMI_PhysicsBody.ExtensionName, new OMI_PhysicsBody() {
-          type = collider.isTrigger ? "trigger" : "static"
+          type = "static"
         });
 
         exporter.DeclareExtensionUsage(OMI_PhysicsBody.ExtensionName, false);
@@ -43,8 +43,6 @@ namespace ThirdRoom.Exporter
 
         if (rigidBody.isKinematic) {
           type = "kinematic";
-        } else if (collider.isTrigger) {
-          type = "trigger";
         } else {
           type = "rigid";
         }
