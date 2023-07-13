@@ -5,6 +5,10 @@ using UnityEngine;
 namespace ThirdRoom.Exporter
 {
   public class SpawnPointBehaviour : MonoBehaviour {
+    public string title;
+    public string team;
+    public string group;
+
     private void OnDrawGizmos() {
           #if UNITY_EDITOR
             var radius = 0.5f;
